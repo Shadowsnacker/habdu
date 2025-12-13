@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function(){
             addHabit();
         }
     });
-
     // Function to add a new habit
     function addHabit() {
         const habitName = habitInput.value.trim();
