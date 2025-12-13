@@ -77,7 +77,16 @@ document.addEventListener('DOMContentLoaded', function(){
         checkbox.className = 'habit-checkbox';
         // Unicode symbol for an empty Ballotbox(remember to backslash, NOT foward slash).
         checkbox.textContent = '\u2610';
-
+        checkbox.addEventListener('click', function () {
+            console.log('Clicked habit:', habit.id);
+            habit.completeToday = !habit.completeToday;
+            console.log('New Status', habit.completeToday);
+            if (habit.completeToday){
+                checkbox.textContent = '\u2611';
+            } else {
+                checkbox.textContent = '\u2610';
+            }
+        });
         // Put it all together
         card.appendChild(checkbox);
         card.appendChild(habitName);
