@@ -83,8 +83,10 @@ document.addEventListener('DOMContentLoaded', function(){
             console.log('New Status', habit.completeToday);
             if (habit.completeToday){
                 checkbox.textContent = '\u2611';
+                card.classList.add('completed');
             } else {
                 checkbox.textContent = '\u2610';
+                card.classList.remove('completed');
             }
         });
         // Put it all together

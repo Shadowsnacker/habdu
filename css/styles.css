@@ -140,3 +140,11 @@ h2 {
     color: #333;
     font-size: 1.2rem;
 }
+
+.habit-card.completed h3 {
+    text-decoration: line-through;
+    opacity: 30%;
+}
+.habit-card.completed .habit-checkbox {
+    opacity: 1;  /* Keeps checkbox at full brightness */
+}
