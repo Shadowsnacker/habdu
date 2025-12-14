@@ -69,14 +69,21 @@ document.addEventListener('DOMContentLoaded', function(){
         // Create the main card div
         const card = document.createElement('div');
         card.className = 'habit-card';
+
         // Add the habit name
         const habitName = document.createElement('h3');
         habitName.textContent = habit.name;
-        // Add a placeholder for the checkbox(functional is next)
+        
+        // Add a placeholder for the checkbox + Unicode symbol for an empty Ballotbox(remember to backslash, NOT foward slash).
         const checkbox = document.createElement('div');
         checkbox.className = 'habit-checkbox';
-        // Unicode symbol for an empty Ballotbox(remember to backslash, NOT foward slash).
         checkbox.textContent = '\u2610';
+
+        // Create delete button
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '✕';  // X symbol
+        deleteBtn.className = 'delete-btn';
+
         checkbox.addEventListener('click', function () {
             console.log('Clicked habit:', habit.id);
             habit.completeToday = !habit.completeToday;
@@ -89,9 +96,12 @@ document.addEventListener('DOMContentLoaded', function(){
                 card.classList.remove('completed');
             }
         });
+
         // Put it all together
         card.appendChild(checkbox);
         card.appendChild(habitName);
+        card.appendChild(deleteBtn);
+
         return card;
     }
 });
