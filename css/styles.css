@@ -126,12 +126,12 @@ h2 {
     font-size: 2rem;
     cursor: pointer;
     user-select: none;
-    color: #ccc;
+    color: #667eea;
     transition: color 0.3s;
 }
 
 .habit-checkbox:hover {
-    color: #667eea;
+    color: #8e66ea;
 }
 
 .habit-card h3 {
@@ -143,8 +143,5 @@ h2 {
 
 .habit-card.completed h3 {
     text-decoration: line-through;
-    opacity: 30%;
-}
-.habit-card.completed .habit-checkbox {
-    opacity: 1;  /* Keeps checkbox at full brightness */
+    opacity: 40%;
 }
