@@ -69,20 +69,21 @@ document.addEventListener('DOMContentLoaded', function(){
         // Create the main card div
         const card = document.createElement('div');
         card.className = 'habit-card';
-
         // Add the habit name
         const habitName = document.createElement('h3');
         habitName.textContent = habit.name;
-        
         // Add a placeholder for the checkbox + Unicode symbol for an empty Ballotbox(remember to backslash, NOT foward slash).
         const checkbox = document.createElement('div');
         checkbox.className = 'habit-checkbox';
         checkbox.textContent = '\u2610';
-
         // Create delete button
         const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = '✕';  // X symbol
+        deleteBtn.textContent = '✕';
         deleteBtn.className = 'delete-btn';
+        // Create edit button
+        const editBtn = document.createElement('button');
+        editBtn.textContent = '✎';
+        editBtn.className = 'edit-btn';
 
         checkbox.addEventListener('click', function () {
             console.log('Clicked habit:', habit.id);
@@ -96,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function(){
                 card.classList.remove('completed');
             }
         });
-
         deleteBtn.addEventListener('click', function(){
             console.log('Delete clicked for habit:', habit.id);
             const index = habits.findIndex(function(h){
@@ -108,10 +108,41 @@ document.addEventListener('DOMContentLoaded', function(){
             habits.splice(index, 1);
             renderHabits();
         });
+        editBtn.addEventListener('click', function(){
+            console.log('Edit clicked for habit:', habit.id);
+            // Create the input field
+            const editInput = document.createElement('input');
+            editInput.type = 'text';
+            editInput.value = habit.name; // Pre-fill with current name
+            editInput.className = 'edit-input';
+            // Replace h3 with input
+            card.replaceChild(editInput, habitName);
+            editInput.focus(); // autofocus to input field!
+            editInput.select(); // autoselects all text for automatic replacing!
+
+            // Actually change to the new name
+            editInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    // Save the new name
+                    const newName = editInput.value.trim();
+                    // Update the habit in the array
+                    habit.name = newName;
+                    // Re-render everything
+                    renderHabits();
+                }
+            });
+            // Also save when they click away (blur = lose focus)
+            editInput.addEventListener('blur', function() {
+                const newName = editInput.value.trim();
+                habit.name = newName;
+                renderHabits();
+            });
+        });
 
         // Put it all together
         card.appendChild(checkbox);
         card.appendChild(habitName);
+        card.appendChild(editBtn);
         card.appendChild(deleteBtn);
 
         return card;
