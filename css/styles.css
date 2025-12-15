@@ -153,23 +153,30 @@ h2 {
     /* Think: size, shape, cursor, transition */
     font-size: 1.2rem;
     border-radius: 10%;
-    padding: 8px 12px;
+    padding: 7px 10px;
+    border: none; /* Removes default button border */
+    cursor: pointer; /* Shows it's clickable */
+    transition: all 0.2s;
 }
 
-.edit-btn {
-    /* Specific styling for edit button */
-    /* Color? Background? */
+.edit-btn { 
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.6) 100%);
+    color: rgba(34, 255, 0, 0.737);
 }
 .edit-btn:hover {
     transform: translateY(2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    color: rgb(102, 126, 234);
+    background: rgb(185, 223, 16);
 }
 
 .delete-btn {
-    /* Specific styling for delete button */
-    /* Maybe red on hover for danger? */
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.6) 100%);
+    color: rgba(255, 0, 0, 0.737);
 }
 .delete-btn:hover {
     transform: translateY(2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    color: rgb(102, 126, 234);
+    background: rgb(255, 72, 0);
 }
