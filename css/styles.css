@@ -145,3 +145,31 @@ h2 {
     text-decoration: line-through;
     opacity: 40%;
 }
+
+/* Edit and Delete Button Styling */
+.edit-btn,
+.delete-btn {
+    /* What should both buttons have in common? */
+    /* Think: size, shape, cursor, transition */
+    font-size: 1.2rem;
+    border-radius: 10%;
+    padding: 8px 12px;
+}
+
+.edit-btn {
+    /* Specific styling for edit button */
+    /* Color? Background? */
+}
+.edit-btn:hover {
+    transform: translateY(2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.delete-btn {
+    /* Specific styling for delete button */
+    /* Maybe red on hover for danger? */
+}
+.delete-btn:hover {
+    transform: translateY(2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
