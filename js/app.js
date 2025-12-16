@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function(){
             console.log('Delete clicked for habit:', habit.id);
             const index = habits.findIndex(function(h){
                 /* findIndex() looks through the array
-                For each habit (I'm calling it h), it checks: "Is this habit's ID the same as the one we clicked?"
+                For each habit(h), it checks: "Is this habit's ID the same as the one we clicked?"
                 When it finds a match, it returns the position (0, 1, 2, etc.) */
                 return h.id === habit.id;
             });
