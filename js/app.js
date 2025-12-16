@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function(){
     const habitInput = document.getElementById('habitInput');
     const addHabitBtn = document.getElementById('addHabitBtn');
     const habitsContainer = document.getElementById('habitsContainer');
-    
     // Load saved habits from localStorage(needs to be after the habitsContainer const)
     const savedHabits = localStorage.getItem('habduHabits');
     if (savedHabits) {
@@ -23,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function(){
     addHabitBtn.addEventListener('click', function() {
         addHabit();
     });
-
     // Also listen for Enter key in the input field
     habitInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
@@ -43,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function(){
             id: Date.now(), // Unique ID using timestamp
             name: habitName,
             createdDate: new Date().toISOString(),
-            completeToday: false,
+            completionDates: [], // Empty array, no completions yet
         }
         // Add to habits array
         habits.push(newHabit);
@@ -85,11 +83,14 @@ document.addEventListener('DOMContentLoaded', function(){
         const checkbox = document.createElement('div');
         checkbox.className = 'habit-checkbox';
         // Set initial state of checkbox based on saved data(formerly had an unchecked box only always start at page refresh)
-        if (habit.completeToday){
+        // Set initial state based on saved data
+        const today = new Date().toISOString().split('T')[0];
+        const isCompletedToday = habit.completionDates.includes(today);
+        if (isCompletedToday) {
             checkbox.textContent = '\u2611';  // Checked
             card.classList.add('completed');   // Add the completed styling
         } else {
-            checkbox.textContent = '\u2610' // Unchecked
+            checkbox.textContent = '\u2610';  // Unchecked
         }
         // Create delete button
         const deleteBtn = document.createElement('button');
@@ -102,15 +103,31 @@ document.addEventListener('DOMContentLoaded', function(){
 
         checkbox.addEventListener('click', function () {
             console.log('Clicked habit:', habit.id);
-            habit.completeToday = !habit.completeToday;
+            // Get today's date as a string (YYYY-MM-DD format)
+            const today = new Date().toISOString().split('T')[0];
+            console.log('Today is:', today);
+            // Check if today is already completed
+            const isCompletedToday = habit.completionDates.includes(today);
+            console.log('Already completed today?', isCompletedToday);
+            // Changes checked box status and symbol
+            if (isCompletedToday) {
+                // Already completed - remove today's date (unchecking)
+                const index = habit.completionDates.indexOf(today);
+                habit.completionDates.splice(index, 1);
+                console.log('Unchecked - removed date');
+                } else {
+                    // Not completed - add today's date (checking)
+                    habit.completionDates.push(today);
+                    console.log('Checked - added date');
+                }
+            // Save to local storage
             localStorage.setItem('habduHabits', JSON.stringify(habits));
-            console.log('New Status', habit.completeToday);
-            if (habit.completeToday){
-                checkbox.textContent = '\u2611';
-                card.classList.add('completed');
-            } else {
-                checkbox.textContent = '\u2610';
+            if (isCompletedToday){
+                checkbox.textContent = '\u2610'; // Empty ballot box symbol
                 card.classList.remove('completed');
+            } else {
+                checkbox.textContent = '\u2611'; // Filled ballot box symbol
+                card.classList.add('completed');
             }
         });
         deleteBtn.addEventListener('click', function(){
