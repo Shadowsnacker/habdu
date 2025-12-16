@@ -11,6 +11,13 @@ document.addEventListener('DOMContentLoaded', function(){
     const habitInput = document.getElementById('habitInput');
     const addHabitBtn = document.getElementById('addHabitBtn');
     const habitsContainer = document.getElementById('habitsContainer');
+    
+    // Load saved habits from localStorage(needs to be after the habitsContainer const)
+    const savedHabits = localStorage.getItem('habduHabits');
+    if (savedHabits) {
+        habits = JSON.parse(savedHabits);
+        renderHabits();
+    }
 
     // Listen for button clicks
     addHabitBtn.addEventListener('click', function() {
@@ -40,6 +47,8 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         // Add to habits array
         habits.push(newHabit);
+        // Save to localStorage. name/'key', 'value'. Local storage only stores text so array is converted with the 'value' to the 'key'
+        localStorage.setItem('habduHabits', JSON.stringify(habits));
         // Clear the input field
         habitInput.value = '';
         // Update display
@@ -75,7 +84,13 @@ document.addEventListener('DOMContentLoaded', function(){
         // Add a placeholder for the checkbox + Unicode symbol for an empty Ballotbox(remember to backslash, NOT foward slash).
         const checkbox = document.createElement('div');
         checkbox.className = 'habit-checkbox';
-        checkbox.textContent = '\u2610';
+        // Set initial state of checkbox based on saved data(formerly had an unchecked box only always start at page refresh)
+        if (habit.completeToday){
+            checkbox.textContent = '\u2611';  // Checked
+            card.classList.add('completed');   // Add the completed styling
+        } else {
+            checkbox.textContent = '\u2610' // Unchecked
+        }
         // Create delete button
         const deleteBtn = document.createElement('button');
         deleteBtn.textContent = '✕';
@@ -88,6 +103,7 @@ document.addEventListener('DOMContentLoaded', function(){
         checkbox.addEventListener('click', function () {
             console.log('Clicked habit:', habit.id);
             habit.completeToday = !habit.completeToday;
+            localStorage.setItem('habduHabits', JSON.stringify(habits));
             console.log('New Status', habit.completeToday);
             if (habit.completeToday){
                 checkbox.textContent = '\u2611';
@@ -100,12 +116,13 @@ document.addEventListener('DOMContentLoaded', function(){
         deleteBtn.addEventListener('click', function(){
             console.log('Delete clicked for habit:', habit.id);
             const index = habits.findIndex(function(h){
-            /* findIndex() looks through the array
+                /* findIndex() looks through the array
                 For each habit (I'm calling it h), it checks: "Is this habit's ID the same as the one we clicked?"
                 When it finds a match, it returns the position (0, 1, 2, etc.) */
                 return h.id === habit.id;
             });
             habits.splice(index, 1);
+            localStorage.setItem('habduHabits', JSON.stringify(habits));
             renderHabits();
         });
         editBtn.addEventListener('click', function(){
@@ -119,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function(){
             card.replaceChild(editInput, habitName);
             editInput.focus(); // autofocus to input field!
             editInput.select(); // autoselects all text for automatic replacing!
-
+            
             // Actually change to the new name
             editInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
@@ -127,6 +144,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     const newName = editInput.value.trim();
                     // Update the habit in the array
                     habit.name = newName;
+                    localStorage.setItem('habduHabits', JSON.stringify(habits));
                     // Re-render everything
                     renderHabits();
                 }
@@ -135,10 +153,11 @@ document.addEventListener('DOMContentLoaded', function(){
             editInput.addEventListener('blur', function() {
                 const newName = editInput.value.trim();
                 habit.name = newName;
+                localStorage.setItem('habduHabits', JSON.stringify(habits));
                 renderHabits();
             });
         });
-
+        
         // Put it all together
         card.appendChild(checkbox);
         card.appendChild(habitName);
