@@ -80,7 +80,6 @@ document.addEventListener('DOMContentLoaded', function(){
         // Add the habit name
         const habitName = document.createElement('h3');
         habitName.textContent = habit.name;
-        // Add a placeholder for the checkbox + Unicode symbol for an empty Ballotbox(remember to backslash, NOT foward slash).
         const checkbox = document.createElement('div');
         checkbox.className = 'habit-checkbox';
         // Set initial state of checkbox based on saved data(formerly had an unchecked box only always start at page refresh)
@@ -88,10 +87,10 @@ document.addEventListener('DOMContentLoaded', function(){
         const today = new Date().toISOString().split('T')[0];
         const isCompletedToday = habit.completionDates.includes(today);
         if (isCompletedToday) {
-            checkbox.textContent = '\u2611';  // Checked
+            checkbox.textContent = '\u2611';  // Checked Ballot box Uniicode(remember backslash, NOT forward-slash(For comments))
             card.classList.add('completed');   // Add the completed styling
         } else {
-            checkbox.textContent = '\u2610';  // Unchecked
+            checkbox.textContent = '\u2610';  // Unchecked Ballot box Unicode
         }
         // Create delete button
         const deleteBtn = document.createElement('button');
