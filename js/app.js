@@ -133,10 +133,10 @@ document.addEventListener('DOMContentLoaded', function(){
         });
         deleteBtn.addEventListener('click', function(){
             console.log('Delete clicked for habit:', habit.id);
+            /* findIndex() looks through the array
+            For each habit(h), it checks: "Is this habit's ID the same as the one we clicked?"
+            When it finds a match, it returns the position (0, 1, 2, etc.) */
             const index = habits.findIndex(function(h){
-                /* findIndex() looks through the array
-                For each habit(h), it checks: "Is this habit's ID the same as the one we clicked?"
-                When it finds a match, it returns the position (0, 1, 2, etc.) */
                 return h.id === habit.id;
             });
             habits.splice(index, 1);
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function(){
             // Replace h3 with input
             card.replaceChild(editInput, habitName);
             editInput.focus(); // autofocus to input field!
-            editInput.select(); // autoselects all text for automatic replacing!
+            editInput.select(); // auto-highlights all text in input field
             
             // Actually change to the new name
             editInput.addEventListener('keypress', function(e) {
@@ -185,9 +185,3 @@ document.addEventListener('DOMContentLoaded', function(){
         return card;
     }
 });
-
-// 2. Then: Mark habits as complete 
-// 3. Then: Save to localStorage
-// 4. Finally: Add streak tracking and stats
-
-// Let's start with a simple test to make sure JS is connected
