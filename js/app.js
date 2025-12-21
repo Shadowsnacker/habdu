@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const habitInput = document.getElementById('habitInput');
     const addHabitBtn = document.getElementById('addHabitBtn');
     const habitsContainer = document.getElementById('habitsContainer');
+    
     // Load saved habits from localStorage(needs to be after the habitsContainer const)
     const savedHabits = localStorage.getItem('habduHabits');
     if (savedHabits) {
