@@ -3,7 +3,6 @@ console.log("Habdu is loading... ");
 // 1. First: Create habits and display
 // This array will store habits
 let habits = [];
-
 //  Wait for the page to fully load before running code
 document.addEventListener('DOMContentLoaded', function(){
     console.log("DOM is ready! Let's build Habdu!");
@@ -29,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function(){
             addHabit();
         }
     });
-
     // Function to add a new habit
     function addHabit() {
         const habitName = habitInput.value.trim();
