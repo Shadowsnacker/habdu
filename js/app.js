@@ -78,6 +78,11 @@ document.addEventListener('DOMContentLoaded', function(){
         // Add the habit name
         const habitName = document.createElement('h3');
         habitName.textContent = habit.name;
+        // Add streak display
+        const streak = calculateStreak(habit.completionDates);
+        const streakDisplay = document.createElement('span');
+        streakDisplay.className = 'streak-display';
+        streakDisplay.textContent = streak > 0 ? `🔥 ${streak} day streak` : '';
         const checkbox = document.createElement('div');
         checkbox.className = 'habit-checkbox';
         // Set initial state of checkbox based on saved data(formerly had an unchecked box only always start at page refresh)
@@ -176,9 +181,32 @@ document.addEventListener('DOMContentLoaded', function(){
         // Put it all together
         card.appendChild(checkbox);
         card.appendChild(habitName);
+        card.appendChild(streakDisplay);
         card.appendChild(editBtn);
         card.appendChild(deleteBtn);
 
+        // Test the streak calculation
+        const streak = calculateStreak(habit.completionDates);
+        console.log('Habit:', habit.name, 'Streak:', streak);
+
         return card;
     }
+    // Function to calculate current streak
+    function calculateStreak(completionDates) {
+        if (completionDates.length === 0)
+            return 0; // No completions = no streak
+        let streak = 0;
+        const today = new Date();
+        // Check each day going backwards from today
+        for (let i = 0; i < 365; i++){
+            const checkDate = new Date(today);
+            checkDate.setDate(today.getDate() - i); // Go back i days
+            const dateString = checkDate.toISOString().split('T')[0];
+            if (completionDates.includes(dateString))
+                streak++;
+            else
+                break; // Stop at first missing day
+        }
+    }
+    return streak;
 });
