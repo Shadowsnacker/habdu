@@ -125,13 +125,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 }
             // Save to local storage
             localStorage.setItem('habduHabits', JSON.stringify(habits));
-            if (isCompletedToday){
-                checkbox.textContent = '\u2610'; // Empty ballot box symbol
-                card.classList.remove('completed');
-            } else {
-                checkbox.textContent = '\u2611'; // Filled ballot box symbol
-                card.classList.add('completed');
-            }
+            renderHabits();
         });
         deleteBtn.addEventListener('click', function(){
             console.log('Delete clicked for habit:', habit.id);
@@ -203,6 +197,6 @@ document.addEventListener('DOMContentLoaded', function(){
             else
                 break; // Stop at first missing day
         }
+        return streak;
     }
-    return streak;
 });
