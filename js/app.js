@@ -185,10 +185,6 @@ document.addEventListener('DOMContentLoaded', function(){
         card.appendChild(editBtn);
         card.appendChild(deleteBtn);
 
-        // Test the streak calculation
-        const streak = calculateStreak(habit.completionDates);
-        console.log('Habit:', habit.name, 'Streak:', streak);
-
         return card;
     }
     // Function to calculate current streak
