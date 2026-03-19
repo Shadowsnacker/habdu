@@ -76,7 +76,7 @@ h2 {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.1s, box-shadow 0.1s;
 }
 
 #addHabitBtn:hover {
@@ -146,11 +146,8 @@ h2 {
     opacity: 40%;
 }
 
-/* Edit and Delete Button Styling */
 .edit-btn,
 .delete-btn {
-    /* What should both buttons have in common? */
-    /* Think: size, shape, cursor, transition */
     font-size: 1.2rem;
     border-radius: 10%;
     padding: 7px 10px;
