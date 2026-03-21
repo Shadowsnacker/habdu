@@ -1,7 +1,6 @@
-// Habdu - Habit Tracker App
+// Habdu - Habits'n to-do's Tracker App
 console.log("Habdu is loading... ");
-// 1. First: Create habits and display
-// This array will store habits
+// 1. First: Create habits and display, this array will store habits
 let habits = [];
 //  Wait for the page to fully load before running code
 document.addEventListener('DOMContentLoaded', function(){
@@ -40,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function(){
             id: Date.now(), // Unique ID using timestamp
             name: habitName,
             createdDate: new Date().toISOString(),
+            isCompletedToday: false,
             completionDates: [], // Empty array, no completions yet
         }
         // Add to habits array
