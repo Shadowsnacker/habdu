@@ -9,14 +9,21 @@ document.addEventListener('DOMContentLoaded', function(){
     const habitInput = document.getElementById('habitInput');
     const addHabitBtn = document.getElementById('addHabitBtn');
     const habitsContainer = document.getElementById('habitsContainer');
-    
-    // Load saved habits from localStorage(needs to be after the habitsContainer const)
+    // Load saved habits from localStorage !Needs to be after the habitsContainer const!
+    /* Since localStorage only supports strings, you must convert complex data types like objects
+         or arrays to JSON strings before storing them, and parse them back when retrieving. 
+    Store an object:
+        const user = { name: 'Alice', loggedIn: true };
+        localStorage.setItem('user', JSON.stringify(user));
+    Retrieve and parse an object:
+        const savedUser = JSON.parse(localStorage.getItem('user'));
+        console.log(savedUser.name); // 'Alice'
+    It is important to check if the item exists before parsing to avoid errors if getItem returns null. */
     const savedHabits = localStorage.getItem('habduHabits');
     if (savedHabits) {
         habits = JSON.parse(savedHabits);
         renderHabits();
     }
-
     // Listen for button clicks
     addHabitBtn.addEventListener('click', function() {
         addHabit();
@@ -171,14 +178,12 @@ document.addEventListener('DOMContentLoaded', function(){
                 renderHabits();
             });
         });
-        
         // Put it all together
         card.appendChild(checkbox);
         card.appendChild(habitName);
         card.appendChild(streakDisplay);
         card.appendChild(editBtn);
         card.appendChild(deleteBtn);
-
         return card;
     }
     // Function to calculate current streak
