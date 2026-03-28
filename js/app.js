@@ -10,15 +10,15 @@ document.addEventListener('DOMContentLoaded', function(){
     const addHabitBtn = document.getElementById('addHabitBtn');
     const habitsContainer = document.getElementById('habitsContainer');
     // Load saved habits from localStorage !Needs to be after the habitsContainer const!
-    /* Since localStorage only supports strings, you must convert complex data types like objects
-         or arrays to JSON strings before storing them, and parse them back when retrieving. 
-    Store an object:
-        const user = { name: 'Alice', loggedIn: true };
-        localStorage.setItem('user', JSON.stringify(user));
-    Retrieve and parse an object:
-        const savedUser = JSON.parse(localStorage.getItem('user'));
-        console.log(savedUser.name); // 'Alice'
-    It is important to check if the item exists before parsing to avoid errors if getItem returns null. */
+        /* Since localStorage only supports strings, you must convert complex data types like objects
+            or arrays to JSON strings before storing them, and parse them back when retrieving. 
+        Store an object:
+            const user = { name: 'Alice', loggedIn: true };
+            localStorage.setItem('user', JSON.stringify(user));
+        Retrieve and parse an object:
+            const savedUser = JSON.parse(localStorage.getItem('user'));
+            console.log(savedUser.name); // 'Alice'
+        It is important to check if the item exists before parsing to avoid errors if getItem returns null. */
     const savedHabits = localStorage.getItem('habduHabits');
     if (savedHabits) {
         habits = JSON.parse(savedHabits);
@@ -190,17 +190,24 @@ document.addEventListener('DOMContentLoaded', function(){
     function calculateStreak(completionDates) {
         if (completionDates.length === 0)
             return 0; // No completions = no streak
+        const today = new Date().toISOString().split('T')[0];
+        // If today isn't completed, streak is 0
+        if (!completionDates.includes(today)) {
+            return 0;
+        }
         let streak = 0;
-        const today = new Date();
+        const todayDate = new Date();
         // Check each day going backwards from today
         for (let i = 0; i < 365; i++){
-            const checkDate = new Date(today);
-            checkDate.setDate(today.getDate() - i); // Go back i days
+            const checkDate = new Date(todayDate);
+            checkDate.setDate(todayDate.getDate() - i); // Go back i days
             const dateString = checkDate.toISOString().split('T')[0];
-            if (completionDates.includes(dateString))
+            if (completionDates.includes(dateString)){
                 streak++;
-            else
+            }
+            else {
                 break; // Stop at first missing day
+            }
         }
         return streak;
     }
