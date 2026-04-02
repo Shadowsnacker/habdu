@@ -5,6 +5,30 @@ let habits = [];
 //  Wait for the page to fully load before running code
 document.addEventListener('DOMContentLoaded', function(){
     console.log("DOM is ready! Let's build Habdu!");
+    // Tab Navigation System
+    // Get all nav items
+    const navItems = document.querySelectorAll('.nav-item');
+    // Add click listeners to each nav item
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Get which view this nav item should show
+            const targetView = this.getAttribute('data-view');
+            
+            // Remove 'active' class from all nav items
+            navItems.forEach(nav => nav.classList.remove('active'));
+            
+            // Add 'active' class to clicked nav item
+            this.classList.add('active');
+            
+            // Hide all views
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // Show the target view
+            document.getElementById(targetView + '-view').classList.add('active');
+        });
+    });
     // Get references to HTML elements
     const habitInput = document.getElementById('habitInput');
     const addHabitBtn = document.getElementById('addHabitBtn');

@@ -5,29 +5,54 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Habdu - Your Habit Tracker</title>
-        <link rel="stylesheet" href="static/styles.css">
+        <link rel="stylesheet" href="css/styles.css">
     </head>
     <body>
-        <div class="container">
-            <header>
-                <h1>Habdu</h1>
-                <p class="tagline">Build better habits, one day at a time</p>
-            </header>
-            <main>
-                <section class="habit-input-section">
-                    <h2>Add a New Habit</h2>
-                    <input type="text" id="habitInput" placeholder="E.g., Drink 8 glasses of water" maxlength="50">
-                    <button id="addHabitBtn">Add Habit</button>
-                </section>
-
-                <section class="habits-display-section">
-                    <h2>Your Habits</h2>
-                    <div id="habitsContainer">
-                        <p class="empty-state">No habits yet. Add your first one above!</p>
-                    </div>
-                </section>
-            </main>
-        </div>
+        <!-- Navigation Sidebar (left side) -->
+         <nav class="sidebar">
+            <div class="nav-item active" data-view="habits">
+                <div class="nav-icon">☑</div>
+                <div class="nav-label">Habits</div>
+            </div>
+            <div class="nav-item" data-view="clock">
+                <div class="nav-icon">🕐</div>
+                <div class="nav-label">Clock</div>
+            </div>
+        </nav>
+        <!-- Main Content Area (RIGHT SIDE) -->
+        <main class="content">
+            <!-- Habits View -->
+            <section id="habits-view" class="view active">
+                <div class="container">
+                    <header>
+                        <h1>Habdu</h1>
+                        <p class="tagline">Checking off habits and to-do's, one day at a time</p>
+                    </header>
+                    <section class="habit-input-section">
+                        <h2>Add a New Habit</h2>
+                        <input
+                            type="text"
+                            id="habitInput"
+                            placeholder="E.g., Drink 8 glasses of water"
+                            maxlength="50">
+                        <button id="addHabitBtn">Add Habit</button>
+                    </section>
+                    <section class="habits-display-section">
+                        <h2>Your Habits</h2>
+                        <div id="habitsContainer">
+                            <p class="empty-state">No habits yet. Add your first one above!</p>
+                        </div>
+                    </section>
+                </div>
+            </section>
+            <!-- Clock View (placeholder) -->
+            <section id="clock-view" class="view">
+                <div class="container">
+                    <h1>24-Hour Clock</h1>
+                    <p>You'll retype the clock code here next!</p>
+                </div>
+            </section>
+        </main>
         <script src="js/app.js"></script>
     </body>
 </html>
