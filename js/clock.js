@@ -1,1 +1,1 @@
-/* Clock Logic */
+/* Clock Logic: Refactor from app.js */

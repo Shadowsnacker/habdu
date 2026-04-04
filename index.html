@@ -55,7 +55,55 @@
                     <button id="clearData">Clear All Data</button>
                 </div>
                 <div id="settingsPanel">
-                    
+                    <button id="closePanel">×</button>
+                    <h2>Edit Activity</h2>
+                    <div class="form-group">
+                        <label for="activityLabel">Activity Name</label>
+                        <input type="text" id="activityLabel" placeholder="e.g., Deep Work">
+                    </div>
+                    <div class="form-group">
+                        <label>Start Time</label>
+                        <div class="time-inputs">
+                            <input type="number" id="startHour" min="0" max="23" placeholder="Hour (0-23)">
+                            <input type="number" id="startMin" min="0" max="59" placeholder="Min (0-59)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Duration</label>
+                        <div class="time-inputs">
+                            <input type="number" id="durationHours" min="0" max="24" placeholder="Hours">
+                            <input type="number" id="durationMin" min="0" max="59" placeholder="Minutes">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="activityColor">Color</label>
+                        <div class="color-picker-container">
+                            <input type="color" id="activityColor">
+                            <span id="colorHex">#3498DB</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Icon</label>
+                        <div class="icon-selector" id="iconSelector">
+                            <div class="icon-option" data-icon="🌙">🌙</div>
+                            <div class="icon-option" data-icon="☕">☕</div>
+                            <div class="icon-option" data-icon="💼">💼</div>
+                            <div class="icon-option" data-icon="🍔">🍔</div>
+                            <div class="icon-option" data-icon="⚡">⚡</div>
+                            <div class="icon-option" data-icon="🏋️">🏋️</div>
+                            <div class="icon-option" data-icon="🎮">🎮</div>
+                            <div class="icon-option" data-icon="📚">📚</div>
+                            <div class="icon-option" data-icon="🎨">🎨</div>
+                            <div class="icon-option" data-icon="🚗">🚗</div>
+                            <div class="icon-option" data-icon="✈️">✈️</div>
+                            <div class="icon-option" data-icon="🎵">🎵</div>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn-save" id="saveActivity">Save</button>
+                        <button class="btn-delete" id="deleteActivity">Delete</button>
+                        <button class="btn-cancel" id="cancelEdit">Cancel</button>
+                    </div>
                 </div>
             </section>
         </main>

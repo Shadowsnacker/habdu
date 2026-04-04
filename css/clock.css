@@ -38,14 +38,6 @@
     transform: translateY(-2px);
 }
 
-
-/* 
-#clockCanvas {
-    background: lightslategrey;
-    border-radius: 50%;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
- 
 #settingsPanel {
     position: fixed;
     right: -400px;
@@ -132,7 +124,7 @@
     gap: 10px;
     margin-top: 30px;
 }
-button {
+.button-group button {
     flex: 1;
     padding: 12px;
     border: none;
@@ -178,26 +170,3 @@ button {
 #closePanel:hover {
     color: #2C3E50;
 }
-Data management button
-#dataControls {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    display: flex;
-    gap: 10px;
-}
-#dataControls button {
-    padding: 10px 15px;
-    background: rgba(255, 255, 255, 0.9);
-    color: #2C3E50;
-    border: 2px solid #34495E;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-#dataControls button:hover {
-    background: white;
-    transform: translateY(-2px);
-}
-*/

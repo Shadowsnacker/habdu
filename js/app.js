@@ -1,7 +1,13 @@
 // Habdu - Habits'n to-do's Tracker App
 console.log("Habdu is loading... ");
-// 1. First: Create habits and display, this array will store habits
+// First: Create habits and display, this array will store habits
 let habits = [];
+// ===== 24-HOUR CLOCK CODE =====
+// Activities array for clock
+let clockActivities = [];
+let currentEditingIndex = -1;
+let selectedIcon = '';
+let isAddingNew = false;
 //  Wait for the page to fully load before running code
 document.addEventListener('DOMContentLoaded', function(){
     console.log("DOM is ready! Let's build Habdu!");
@@ -235,4 +241,24 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         return streak;
     }
+
+    // ===== CLOCK INITIALIZATION =====
+    // Load clock activities from localStorage
+    function loadClockFromStorage() {
+        const saved = localStorage.getItem('lifeClockActivities');
+        if (saved) {
+            try {
+                clockActivities = JSON.parse(saved);
+            } catch (e) {
+                clockActivities = [];
+            }
+        }
+    }
+
+    function saveClockToStorage() {
+        localStorage.setItem('lifeClockActivities', JSON.stringify(clockActivities));
+    }
+
+    // Initialize clock when page loads
+    loadClockFromStorage();
 });

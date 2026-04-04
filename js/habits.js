@@ -1,1 +1,1 @@
-/* Habit Logic */
+/* Habit Logic: Refactor from app.js */
