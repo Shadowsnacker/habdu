@@ -90,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function(){
         console.log('Habit added:', newHabit);
         console.log('All Habits:', habits);
     }
-
     // Function to display all habits on the page
     function renderHabits() {
         // Clear the container
@@ -106,7 +105,6 @@ document.addEventListener('DOMContentLoaded', function(){
             habitsContainer.appendChild(habitCard);
         });
     }
-
     // Function to create a habit card element
     function createHabitCard(habit) {
         // Create the main card div
@@ -254,11 +252,9 @@ document.addEventListener('DOMContentLoaded', function(){
             }
         }
     }
-
     function saveClockToStorage() {
         localStorage.setItem('lifeClockActivities', JSON.stringify(clockActivities));
     }
-
     // ===== CLOCK DRAWING FUNCTIONS =====
     // Convert hours + minutes to degrees (0° = midnight at bottom)
     function timeToAngle(hours, minutes) {
@@ -305,7 +301,6 @@ document.addEventListener('DOMContentLoaded', function(){
         
         ctx.restore();
     }
-
     // Draw a single activity wedge
     function drawActivityWedge(ctx, centerX, centerY, radius, activity) {
         const startAngle = timeToAngle(activity.startHour, activity.startMin);
@@ -347,7 +342,6 @@ document.addEventListener('DOMContentLoaded', function(){
             ctx.fillText(activity.icon, iconX, iconY);
         }
     }
-
     // Main draw function - renders the entire clock
     function drawClock() {
         const canvas = document.getElementById('clockCanvas');
@@ -392,7 +386,6 @@ document.addEventListener('DOMContentLoaded', function(){
             y: evt.clientY - rect.top
         };
     }
-
     // Convert mouse position to angle
     function mouseToAngle(mouseX, mouseY, centerX, centerY) {
         const dx = mouseX - centerX;
@@ -402,14 +395,12 @@ document.addEventListener('DOMContentLoaded', function(){
         if (angle < 0) angle += 360;
         return angle;
     }
-
     // Check if click is inside the clock circle
     function isInsideCircle(mouseX, mouseY, centerX, centerY, radius) {
         const dx = mouseX - centerX;
         const dy = mouseY - centerY;
         return Math.sqrt(dx * dx + dy * dy) <= radius;
     }
-
     // Find which activity was clicked
     function getClickedActivity(clickAngle) {
         for (let i = 0; i < clockActivities.length; i++) {
@@ -433,7 +424,6 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         return -1; // No activity at this angle
     }
-
     // ===== SETTINGS PANEL FUNCTIONS =====
     // Open panel to edit an existing activity
     function openSettingsPanel(activityIndex) {
@@ -458,7 +448,6 @@ document.addEventListener('DOMContentLoaded', function(){
         document.getElementById('deleteActivity').style.display = '';
         document.getElementById('settingsPanel').classList.add('open');
     }
-
     // Open panel to create a new activity
     function openNewActivityPanel(clickAngle) {
         isAddingNew = true;
@@ -482,12 +471,10 @@ document.addEventListener('DOMContentLoaded', function(){
         document.getElementById('deleteActivity').style.display = 'none';
         document.getElementById('settingsPanel').classList.add('open');
     }
-
     // Close the settings panel
     function closeSettingsPanel() {
         document.getElementById('settingsPanel').classList.remove('open');
     }
-
     // ===== EVENT LISTENERS =====
     // Canvas click detection
     const clockCanvas = document.getElementById('clockCanvas');
@@ -510,7 +497,6 @@ document.addEventListener('DOMContentLoaded', function(){
             }
         });
     }
-
     // Icon selector
     document.getElementById('iconSelector').addEventListener('click', function(e) {
         if (e.target.classList.contains('icon-option')) {
@@ -521,16 +507,13 @@ document.addEventListener('DOMContentLoaded', function(){
             e.target.classList.add('selected');
         }
     });
-
     // Color picker updates hex display
     document.getElementById('activityColor').addEventListener('input', function(e) {
         document.getElementById('colorHex').textContent = e.target.value;
     });
-
     // Close and cancel buttons
     document.getElementById('closePanel').addEventListener('click', closeSettingsPanel);
     document.getElementById('cancelEdit').addEventListener('click', closeSettingsPanel);
-
     // Save button
     document.getElementById('saveActivity').addEventListener('click', function() {
         const newActivity = {
@@ -553,7 +536,6 @@ document.addEventListener('DOMContentLoaded', function(){
         drawClock();
         closeSettingsPanel();
     });
-
     // Delete button
     document.getElementById('deleteActivity').addEventListener('click', function() {
         if (isAddingNew || currentEditingIndex === -1) return;
@@ -562,7 +544,6 @@ document.addEventListener('DOMContentLoaded', function(){
         drawClock();
         closeSettingsPanel();
     });
-
     // View Data button
     document.getElementById('viewData').addEventListener('click', function() {
         const saved = localStorage.getItem('lifeClockActivities');
@@ -572,7 +553,6 @@ document.addEventListener('DOMContentLoaded', function(){
             alert('No stored data found!');
         }
     });
-
     // Clear Data button
     document.getElementById('clearData').addEventListener('click', function() {
         if (confirm('Are you sure you want to clear all clock data?')) {
