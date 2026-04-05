@@ -259,6 +259,333 @@ document.addEventListener('DOMContentLoaded', function(){
         localStorage.setItem('lifeClockActivities', JSON.stringify(clockActivities));
     }
 
+    // ===== CLOCK DRAWING FUNCTIONS =====
+    // Convert hours + minutes to degrees (0° = midnight at bottom)
+    function timeToAngle(hours, minutes) {
+        return (hours * 15) + (minutes * 0.25);
+    }
+    // Draw hour markers around the clock
+    function drawHourMarkers(ctx, centerX, centerY, radius) {
+        ctx.fillStyle = '#2C3E50';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        for (let hour = 0; hour < 24; hour++) {
+            const angle = ((timeToAngle(hour, 0) + 90) % 360) * Math.PI / 180;
+            const x = centerX + (radius + 25) * Math.cos(angle);
+            const y = centerY + (radius + 25) * Math.sin(angle);
+            ctx.fillText(hour.toString().padStart(2, '0'), x, y);
+        }
+    }
+    // Draw sun/moon indicator showing current time
+    function drawTimeIndicator(ctx, centerX, centerY, radius) {
+        const now = new Date();
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
+        
+        const totalMinutes = (hours * 60) + minutes + (seconds / 60);
+        const angle = (totalMinutes / (24 * 60)) * 360;
+        const angleRad = ((angle + 90) % 360) * Math.PI / 180;
+        
+        const indicatorRadius = radius + 10;
+        const x = centerX + indicatorRadius * Math.cos(angleRad);
+        const y = centerY + indicatorRadius * Math.sin(angleRad);
+        
+        const isDay = hours >= 6 && hours < 18;
+        
+        ctx.save();
+        ctx.translate(x, y);
+        
+        ctx.font = '32px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(isDay ? '☀️' : '🌙', 0, 0);
+        
+        ctx.restore();
+    }
+
+    // Draw a single activity wedge
+    function drawActivityWedge(ctx, centerX, centerY, radius, activity) {
+        const startAngle = timeToAngle(activity.startHour, activity.startMin);
+        const endAngle = timeToAngle(
+            activity.startHour + activity.durationHours,
+            activity.startMin + activity.durationMin
+        );
+        
+        const startRad = ((startAngle + 90) % 360) * Math.PI / 180;
+        const endRad = ((endAngle + 90) % 360) * Math.PI / 180;
+        
+        // Draw wedge
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startRad, endRad);
+        ctx.closePath();
+        ctx.fillStyle = activity.color;
+        ctx.fill();
+        
+        // Draw icon with white background
+        if (activity.icon) {
+            const midAngle = (startAngle + endAngle) / 2;
+            const midRad = ((midAngle + 90) % 360) * Math.PI / 180;
+            const iconDistance = radius * 0.6;
+            const iconX = centerX + iconDistance * Math.cos(midRad);
+            const iconY = centerY + iconDistance * Math.sin(midRad);
+            
+            // White circle background
+            ctx.beginPath();
+            ctx.arc(iconX, iconY, 20, 0, 2 * Math.PI);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.fill();
+            
+            // Icon
+            ctx.font = '28px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#000000';
+            ctx.fillText(activity.icon, iconX, iconY);
+        }
+    }
+
+    // Main draw function - renders the entire clock
+    function drawClock() {
+        const canvas = document.getElementById('clockCanvas');
+        if (!canvas) return; // Exit if canvas doesn't exist
+        
+        const ctx = canvas.getContext('2d');
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = Math.min(centerX, centerY) - 60;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Background circle
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = '#ECF0F1';
+        ctx.fill();
+        ctx.strokeStyle = '#34495E';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        // Draw all activities
+        clockActivities.forEach(activity => {
+            drawActivityWedge(ctx, centerX, centerY, radius, activity);
+        });
+        
+        drawHourMarkers(ctx, centerX, centerY, radius);
+        drawTimeIndicator(ctx, centerX, centerY, radius);
+        
+        // Center dot
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 8, 0, 2 * Math.PI);
+        ctx.fillStyle = '#2C3E50';
+        ctx.fill();
+    }
+    // ===== CLICK DETECTION FUNCTIONS =====
+    // Get mouse position relative to canvas
+    function getMousePos(canvas, evt) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+            x: evt.clientX - rect.left,
+            y: evt.clientY - rect.top
+        };
+    }
+
+    // Convert mouse position to angle
+    function mouseToAngle(mouseX, mouseY, centerX, centerY) {
+        const dx = mouseX - centerX;
+        const dy = mouseY - centerY;
+        let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+        angle = angle - 90;
+        if (angle < 0) angle += 360;
+        return angle;
+    }
+
+    // Check if click is inside the clock circle
+    function isInsideCircle(mouseX, mouseY, centerX, centerY, radius) {
+        const dx = mouseX - centerX;
+        const dy = mouseY - centerY;
+        return Math.sqrt(dx * dx + dy * dy) <= radius;
+    }
+
+    // Find which activity was clicked
+    function getClickedActivity(clickAngle) {
+        for (let i = 0; i < clockActivities.length; i++) {
+            const activity = clockActivities[i];
+            const startAngle = timeToAngle(activity.startHour, activity.startMin);
+            const endAngle = timeToAngle(
+                activity.startHour + activity.durationHours,
+                activity.startMin + activity.durationMin
+            );
+            
+            if (endAngle < startAngle) {
+                // Activity wraps around midnight
+                if (clickAngle >= startAngle || clickAngle <= endAngle) {
+                    return i;
+                }
+            } else {
+                if (clickAngle >= startAngle && clickAngle <= endAngle) {
+                    return i;
+                }
+            }
+        }
+        return -1; // No activity at this angle
+    }
+
+    // ===== SETTINGS PANEL FUNCTIONS =====
+    // Open panel to edit an existing activity
+    function openSettingsPanel(activityIndex) {
+        isAddingNew = false;
+        currentEditingIndex = activityIndex;
+        const activity = clockActivities[activityIndex];
+        
+        document.querySelector('#settingsPanel h2').textContent = 'Edit Activity';
+        document.getElementById('activityLabel').value = activity.label;
+        document.getElementById('startHour').value = activity.startHour;
+        document.getElementById('startMin').value = activity.startMin;
+        document.getElementById('durationHours').value = activity.durationHours;
+        document.getElementById('durationMin').value = activity.durationMin;
+        document.getElementById('activityColor').value = activity.color;
+        document.getElementById('colorHex').textContent = activity.color;
+        
+        selectedIcon = activity.icon;
+        document.querySelectorAll('.icon-option').forEach(el => {
+            el.classList.toggle('selected', el.dataset.icon === selectedIcon);
+        });
+        
+        document.getElementById('deleteActivity').style.display = '';
+        document.getElementById('settingsPanel').classList.add('open');
+    }
+
+    // Open panel to create a new activity
+    function openNewActivityPanel(clickAngle) {
+        isAddingNew = true;
+        currentEditingIndex = -1;
+        const startHour = Math.floor(clickAngle / 15);
+        
+        document.querySelector('#settingsPanel h2').textContent = 'Add New Activity';
+        document.getElementById('activityLabel').value = '';
+        document.getElementById('startHour').value = startHour;
+        document.getElementById('startMin').value = 0;
+        document.getElementById('durationHours').value = 1;
+        document.getElementById('durationMin').value = 0;
+        document.getElementById('activityColor').value = '#3498DB';
+        document.getElementById('colorHex').textContent = '#3498DB';
+        
+        selectedIcon = '';
+        document.querySelectorAll('.icon-option').forEach(el => {
+            el.classList.remove('selected');
+        });
+        
+        document.getElementById('deleteActivity').style.display = 'none';
+        document.getElementById('settingsPanel').classList.add('open');
+    }
+
+    // Close the settings panel
+    function closeSettingsPanel() {
+        document.getElementById('settingsPanel').classList.remove('open');
+    }
+
+    // ===== EVENT LISTENERS =====
+    // Canvas click detection
+    const clockCanvas = document.getElementById('clockCanvas');
+    if (clockCanvas) {
+        clockCanvas.addEventListener('click', function(evt) {
+            const mousePos = getMousePos(clockCanvas, evt);
+            const centerX = clockCanvas.width / 2;
+            const centerY = clockCanvas.height / 2;
+            const radius = Math.min(centerX, centerY) - 60;
+            
+            if (isInsideCircle(mousePos.x, mousePos.y, centerX, centerY, radius)) {
+                const clickAngle = mouseToAngle(mousePos.x, mousePos.y, centerX, centerY);
+                const activityIndex = getClickedActivity(clickAngle);
+                
+                if (activityIndex !== -1) {
+                    openSettingsPanel(activityIndex);
+                } else {
+                    openNewActivityPanel(clickAngle);
+                }
+            }
+        });
+    }
+
+    // Icon selector
+    document.getElementById('iconSelector').addEventListener('click', function(e) {
+        if (e.target.classList.contains('icon-option')) {
+            selectedIcon = e.target.dataset.icon;
+            document.querySelectorAll('.icon-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            e.target.classList.add('selected');
+        }
+    });
+
+    // Color picker updates hex display
+    document.getElementById('activityColor').addEventListener('input', function(e) {
+        document.getElementById('colorHex').textContent = e.target.value;
+    });
+
+    // Close and cancel buttons
+    document.getElementById('closePanel').addEventListener('click', closeSettingsPanel);
+    document.getElementById('cancelEdit').addEventListener('click', closeSettingsPanel);
+
+    // Save button
+    document.getElementById('saveActivity').addEventListener('click', function() {
+        const newActivity = {
+            startHour: parseInt(document.getElementById('startHour').value) || 0,
+            startMin: parseInt(document.getElementById('startMin').value) || 0,
+            durationHours: parseInt(document.getElementById('durationHours').value) || 0,
+            durationMin: parseInt(document.getElementById('durationMin').value) || 0,
+            color: document.getElementById('activityColor').value,
+            icon: selectedIcon,
+            label: document.getElementById('activityLabel').value || 'New Activity'
+        };
+        
+        if (isAddingNew) {
+            clockActivities.push(newActivity);
+        } else if (currentEditingIndex !== -1) {
+            clockActivities[currentEditingIndex] = newActivity;
+        }
+        
+        saveClockToStorage();
+        drawClock();
+        closeSettingsPanel();
+    });
+
+    // Delete button
+    document.getElementById('deleteActivity').addEventListener('click', function() {
+        if (isAddingNew || currentEditingIndex === -1) return;
+        clockActivities.splice(currentEditingIndex, 1);
+        saveClockToStorage();
+        drawClock();
+        closeSettingsPanel();
+    });
+
+    // View Data button
+    document.getElementById('viewData').addEventListener('click', function() {
+        const saved = localStorage.getItem('lifeClockActivities');
+        if (saved) {
+            alert('Stored activities:\n\n' + JSON.stringify(JSON.parse(saved), null, 2));
+        } else {
+            alert('No stored data found!');
+        }
+    });
+
+    // Clear Data button
+    document.getElementById('clearData').addEventListener('click', function() {
+        if (confirm('Are you sure you want to clear all clock data?')) {
+            localStorage.removeItem('lifeClockActivities');
+            clockActivities = [];
+            drawClock();
+            alert('All data cleared!');
+        }
+    });
+
     // Initialize clock when page loads
     loadClockFromStorage();
+    // Start the clock animation (updates every second)
+    setInterval(drawClock, 1000);
+    drawClock(); // Draw immediately on load
 });
