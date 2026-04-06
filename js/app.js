@@ -446,6 +446,7 @@ document.addEventListener('DOMContentLoaded', function(){
         });
         
         document.getElementById('deleteActivity').style.display = '';
+        document.getElementById('clock-view').classList.add('panel-open');
         document.getElementById('settingsPanel').classList.add('open');
     }
     // Open panel to create a new activity
@@ -469,11 +470,13 @@ document.addEventListener('DOMContentLoaded', function(){
         });
         
         document.getElementById('deleteActivity').style.display = 'none';
+        document.getElementById('clock-view').classList.add('panel-open');
         document.getElementById('settingsPanel').classList.add('open');
     }
     // Close the settings panel
     function closeSettingsPanel() {
         document.getElementById('settingsPanel').classList.remove('open');
+        document.getElementById('clock-view').classList.remove('panel-open');
     }
     // ===== EVENT LISTENERS =====
     // Canvas click detection

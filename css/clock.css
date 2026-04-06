@@ -7,6 +7,11 @@
     min-height: 100%;
     position: relative;
 }
+/* Shift clock left when settings panel is open */
+#clock-view.panel-open #clockCanvas {
+    transform: translateX(-210px);
+    transition: transform 0.3s ease;
+}
 #clockCanvas {
     background: lightslategrey;
     border-radius: 50%;
@@ -40,9 +45,9 @@
 
 #settingsPanel {
     position: fixed;
-    right: -400px;
+    right: -420px;
     top: 0;
-    width: 400px;
+    width: 420px;
     height: 100vh;
     background: lightgoldenrodyellow;
     box-shadow: -5px 0 20px rgba(0,0,0,0.3);
