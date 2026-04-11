@@ -100,3 +100,35 @@ h1 {
     color: #666;
     font-size: 1.1rem;
 }
+
+/* Mobile Responsive Fixes */
+@media (max-width: 768px) {
+    /* Make canvas scale down on mobile */
+    #clockCanvas {
+        width: 85vw !important;  /* 85% of viewport width */
+        height: 85vw !important;  /* Square aspect ratio */
+    }
+    
+    /* Make containers fit mobile screens */
+    .container {
+        max-width: 95vw;
+        padding: 20px;
+    }
+    
+    /* Stack data controls vertically on mobile */
+    #dataControls {
+        left: 10px;
+        flex-direction: column;
+        width: auto;
+    }
+    
+    /* Make settings panel full width on mobile */
+    #settingsPanel {
+        width: 100vw;
+        right: -100vw;
+    }
+    
+    #settingsPanel.open {
+        right: 0;
+    }
+}
