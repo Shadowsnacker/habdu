@@ -103,6 +103,26 @@ h1 {
 
 /* Mobile Responsive Fixes */
 @media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: center;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .nav-item {
+        width: 29%;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+    }
+
+    .nav-item.active {
+        border-left: none;
+        border-bottom: 3px solid white;
+    }
     /* Make canvas scale down on mobile */
     #clockCanvas {
         width: 85vw !important;  /* 85% of viewport width */
