@@ -11,6 +11,7 @@ let isAddingNew = false;
 //  Wait for the page to fully load before running code
 document.addEventListener('DOMContentLoaded', function(){
     console.log("DOM is ready! Let's build Habdu!");
+    timeclock.init();
     // Tab Navigation System
     // Get all nav items
     const navItems = document.querySelectorAll('.nav-item');

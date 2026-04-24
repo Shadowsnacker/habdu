@@ -1,0 +1,447 @@
+/* Timeclock Styles - Scoped to #timeclock-view */
+
+/* ── View container ── */
+#timeclock-view {
+    background: #0d0718;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Ambient background glows */
+#timeclock-view::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(168,85,247,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+#timeclock-view::after {
+    content: '';
+    position: absolute;
+    bottom: -200px; right: -200px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(74,222,128,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ── App container ── */
+#timeclock-app {
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 0 80px 0;
+    font-family: 'Syne', sans-serif;
+    color: #e8dff8;
+}
+
+/* ── Header ── */
+#timeclock-view .header {
+    background: linear-gradient(135deg, #1a0a35 0%, #0f1a2e 100%);
+    border-bottom: 1px solid #3a2568;
+    padding: 20px 20px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+}
+#timeclock-view .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+#timeclock-view .app-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: #e8dff8;
+}
+#timeclock-view .app-subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #8b7aaa;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* ── Week nav ── */
+#timeclock-view .week-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+#timeclock-view .week-label {
+    flex: 1;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: #e8dff8;
+    font-weight: 500;
+}
+#timeclock-view .nav-btn {
+    background: #1e1240;
+    border: 1px solid #3a2568;
+    color: #c084fc;
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+}
+#timeclock-view .nav-btn:hover {
+    background: #271a50;
+    border-color: #a855f7;
+}
+#timeclock-view .today-btn {
+    background: #1e1240;
+    border: 1px solid #3a2568;
+    color: #8b7aaa;
+    padding: 0 12px; height: 34px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: all 0.15s;
+}
+#timeclock-view .today-btn:hover {
+    border-color: #a855f7;
+    color: #c084fc;
+}
+
+/* ── Totals Bar ── */
+#timeclock-view .totals-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px 16px 8px;
+}
+#timeclock-view .total-card {
+    background: #150d2a;
+    border: 1px solid #3a2568;
+    border-radius: 12px;
+    padding: 14px 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+#timeclock-view .total-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+}
+#timeclock-view .total-card.raw::before  { background: linear-gradient(90deg, #a855f7, #7c3aed); }
+#timeclock-view .total-card.calc::before { background: linear-gradient(90deg, #22c55e, #4ade80); }
+
+#timeclock-view .total-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+#timeclock-view .total-card.raw  .total-value { color: #c084fc; }
+#timeclock-view .total-card.calc .total-value { color: #4ade80; }
+#timeclock-view .total-card.calc .total-value.overtime { color: #f87171; }
+
+#timeclock-view .total-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: #8b7aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+#timeclock-view .ot-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: #f87171;
+    background: rgba(248,113,113,0.12);
+    border: 1px solid rgba(248,113,113,0.3);
+    border-radius: 4px;
+    padding: 2px 5px;
+    margin-top: 4px;
+    letter-spacing: 0.06em;
+}
+
+/* ── Days List ── */
+#timeclock-view .days-list {
+    padding: 4px 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+#timeclock-view .day-card {
+    background: #150d2a;
+    border: 1px solid #3a2568;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    animation: tcFadeSlideIn 0.2s ease both;
+}
+#timeclock-view .day-card.today {
+    border-color: #7c3aed;
+}
+#timeclock-view .day-card.expanded {
+    border-color: #a855f7;
+}
+#timeclock-view .day-header {
+    display: flex;
+    align-items: center;
+    padding: 13px 16px;
+    cursor: pointer;
+    user-select: none;
+    gap: 10px;
+    transition: background 0.15s;
+}
+#timeclock-view .day-header:hover { background: rgba(168,85,247,0.05); }
+
+#timeclock-view .day-chevron {
+    color: #5a4a7a;
+    font-size: 14px;
+    transition: transform 0.2s;
+    width: 16px;
+    flex-shrink: 0;
+}
+#timeclock-view .expanded .day-chevron { transform: rotate(90deg); color: #c084fc; }
+
+#timeclock-view .day-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 600;
+}
+#timeclock-view .day-card.today .day-name { color: #c084fc; }
+
+#timeclock-view .today-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 6px #4ade80;
+    flex-shrink: 0;
+}
+#timeclock-view .day-total {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4ade80;
+    min-width: 48px;
+    text-align: right;
+}
+#timeclock-view .day-total.zero { color: #5a4a7a; }
+
+#timeclock-view .day-add-btn {
+    background: none;
+    border: none;
+    color: #5a4a7a;
+    font-size: 18px;
+    cursor: pointer;
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+}
+#timeclock-view .day-add-btn:hover {
+    background: rgba(74,222,128,0.12);
+    color: #4ade80;
+}
+
+/* Day body (expanded) */
+#timeclock-view .day-body {
+    display: none;
+    padding: 0 16px 14px;
+    border-top: 1px solid #3a2568;
+    flex-direction: column;
+    gap: 10px;
+}
+#timeclock-view .expanded .day-body { display: flex; }
+
+/* Entry row */
+#timeclock-view .entry-row {
+    background: #1e1240;
+    border: 1px solid #3a2568;
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px;
+}
+#timeclock-view .entry-field {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+#timeclock-view .entry-field label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: #8b7aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+#timeclock-view .entry-field input[type="time"] {
+    background: #271a50;
+    border: 1px solid #3a2568;
+    border-radius: 6px;
+    color: #e8dff8;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 6px 8px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+}
+#timeclock-view .entry-field input[type="time"]:focus {
+    border-color: #a855f7;
+}
+#timeclock-view .entry-field input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.6) sepia(1) saturate(2) hue-rotate(220deg);
+    cursor: pointer;
+}
+#timeclock-view .entry-hours {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+#timeclock-view .entry-hours label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: #8b7aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+#timeclock-view .entry-hours-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: #4ade80;
+    font-weight: 500;
+}
+#timeclock-view .entry-hours-value.empty { color: #5a4a7a; }
+
+#timeclock-view .entry-delete-btn {
+    background: none;
+    border: none;
+    color: #5a4a7a;
+    font-size: 15px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    align-self: center;
+}
+#timeclock-view .entry-delete-btn:hover {
+    background: rgba(248,113,113,0.12);
+    color: #f87171;
+}
+
+/* New entry form */
+#timeclock-view .new-entry-form {
+    background: #1e1240;
+    border: 1px dashed #3a2568;
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
+#timeclock-view .new-entry-form.visible { display: flex; }
+
+#timeclock-view .new-entry-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+}
+#timeclock-view .new-entry-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+#timeclock-view .btn-save,
+#timeclock-view .btn-cancel {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+}
+#timeclock-view .btn-save {
+    background: linear-gradient(135deg, #22c55e, #4ade80);
+    color: #0d0718;
+}
+#timeclock-view .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
+#timeclock-view .btn-cancel {
+    background: #271a50;
+    border: 1px solid #3a2568;
+    color: #8b7aaa;
+}
+#timeclock-view .btn-cancel:hover { border-color: #f87171; color: #f87171; }
+
+#timeclock-view .new-hours-preview {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: #22c55e;
+    text-align: center;
+    padding: 6px;
+    background: rgba(74,222,128,0.06);
+    border-radius: 6px;
+    display: none;
+}
+#timeclock-view .new-hours-preview.visible { display: block; }
+
+/* Empty day message */
+#timeclock-view .empty-day {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #5a4a7a;
+    text-align: center;
+    padding: 12px 0 4px;
+    letter-spacing: 0.04em;
+}
+
+/* ── Footer ── */
+#timeclock-view .footer {
+    text-align: center;
+    padding: 24px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #5a4a7a;
+    letter-spacing: 0.06em;
+}
+#timeclock-view .footer span {
+    color: #7c3aed;
+}
+
+/* Scrollbar */
+#timeclock-view ::-webkit-scrollbar { width: 4px; }
+#timeclock-view ::-webkit-scrollbar-track { background: #0d0718; }
+#timeclock-view ::-webkit-scrollbar-thumb { background: #3a2568; border-radius: 2px; }
+
+/* Animation */
+@keyframes tcFadeSlideIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+#timeclock-view .day-card:nth-child(1) { animation-delay: 0.03s; }
+#timeclock-view .day-card:nth-child(2) { animation-delay: 0.06s; }
+#timeclock-view .day-card:nth-child(3) { animation-delay: 0.09s; }
+#timeclock-view .day-card:nth-child(4) { animation-delay: 0.12s; }
+#timeclock-view .day-card:nth-child(5) { animation-delay: 0.15s; }
+#timeclock-view .day-card:nth-child(6) { animation-delay: 0.18s; }
+#timeclock-view .day-card:nth-child(7) { animation-delay: 0.21s; }
