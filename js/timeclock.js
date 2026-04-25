@@ -3,13 +3,11 @@
 // collisions with habits code in app.js
 // ─────────────────────────────────────────────
 const timeclock = {
-
     // ── Constants ──
     STORAGE_KEY: 'melisa_timeclock_v1',
     DAY_NAMES:   ['SUN','MON','TUE','WED','THU','FRI','SAT'],
     FULL_DAYS:   ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
     MONTH_SHORT: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-
     // ── State ──
     state: {
         weekStart: null,
@@ -17,12 +15,10 @@ const timeclock = {
         newEntryDay: null,
         data: {}
     },
-
     // ── Utilities ──
     toISODate(d) {
         return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     },
-
     getWeekStart(d) {
         const dt = new Date(d);
         const day = dt.getDay();
@@ -31,23 +27,19 @@ const timeclock = {
         dt.setHours(0,0,0,0);
         return dt;
     },
-
     addDays(d, n) {
         const dt = new Date(d);
         dt.setDate(dt.getDate() + n);
         return dt;
     },
-
     getWeekDays(weekStart) {
         return Array.from({length:7}, (_,i) => timeclock.addDays(weekStart, i));
     },
-
     timeToDecimal(t) {
         if (!t) return null;
         const [h, m] = t.split(':').map(Number);
         return h + m/60;
     },
-
     calcHours(from, to) {
         const f = timeclock.timeToDecimal(from), t = timeclock.timeToDecimal(to);
         if (f === null || t === null) return null;
@@ -55,12 +47,10 @@ const timeclock = {
         if (diff < 0) diff += 24;
         return diff;
     },
-
     fmtHours(h) {
         if (h === null || h === undefined) return '—';
         return h.toFixed(2);
     },
-
     formatWeekRange(ws) {
         const we = timeclock.addDays(ws, 6);
         const sm = timeclock.MONTH_SHORT[ws.getMonth()];
@@ -68,12 +58,10 @@ const timeclock = {
         if (sm === em) return `${sm} ${ws.getDate()} – ${we.getDate()}, ${ws.getFullYear()}`;
         return `${sm} ${ws.getDate()} – ${em} ${we.getDate()}, ${we.getFullYear()}`;
     },
-
     isToday(d) {
         const t = new Date();
         return d.getFullYear()===t.getFullYear() && d.getMonth()===t.getMonth() && d.getDate()===t.getDate();
     },
-
     // ── Data ──
     loadData() {
         try {
@@ -81,15 +69,12 @@ const timeclock = {
             if (raw) timeclock.state.data = JSON.parse(raw);
         } catch(e) { timeclock.state.data = {}; }
     },
-
     saveData() {
         try { localStorage.setItem(timeclock.STORAGE_KEY, JSON.stringify(timeclock.state.data)); } catch(e) {}
     },
-
     getEntries(dateStr) {
         return (timeclock.state.data[dateStr] || []);
     },
-
     setEntries(dateStr, entries) {
         if (entries.length === 0) {
             delete timeclock.state.data[dateStr];
@@ -98,18 +83,15 @@ const timeclock = {
         }
         timeclock.saveData();
     },
-
     addEntry(dateStr, from, to) {
         const entries = timeclock.getEntries(dateStr).slice();
         entries.push({ from, to });
         timeclock.setEntries(dateStr, entries);
     },
-
     deleteEntry(dateStr, idx) {
         const entries = timeclock.getEntries(dateStr).filter((_,i) => i !== idx);
         timeclock.setEntries(dateStr, entries);
     },
-
     // ── Render ──
     render() {
         const app = document.getElementById('timeclock-app');
@@ -117,10 +99,8 @@ const timeclock = {
         app.innerHTML = timeclock.buildHTML();
         timeclock.attachEvents();
     },
-
     buildHTML() {
         const days = timeclock.getWeekDays(timeclock.state.weekStart);
-
         let rawTotal = 0;
         days.forEach(d => {
             timeclock.getEntries(timeclock.toISODate(d)).forEach(e => {
@@ -130,9 +110,7 @@ const timeclock = {
         });
         const calcTotal = Math.min(rawTotal, 40);
         const ot = rawTotal > 40 ? rawTotal - 40 : 0;
-
         let daysHTML = days.map(d => timeclock.buildDayCard(d)).join('');
-
         return `
             <div class="header">
                 <div class="header-top">
@@ -147,7 +125,6 @@ const timeclock = {
                     <button class="today-btn" id="tcGotoToday">Today</button>
                 </div>
             </div>
-
             <div class="totals-bar">
                 <div class="total-card raw">
                     <div class="total-value">${timeclock.fmtHours(rawTotal)}</div>
@@ -159,26 +136,24 @@ const timeclock = {
                     <div class="total-label">Reg. Total hrs</div>
                 </div>
             </div>
-
             <div class="days-list">${daysHTML}</div>
-
+            <div style="text-align: center; padding: 16px;">
+                <button class="btn-cancel" id="tcClearData">Clear All Data</button>
+            </div>
             <div class="footer">built with <span>♥</span> for melisa · data saved locally</div>
         `;
     },
-
     buildDayCard(d) {
         const dateStr   = timeclock.toISODate(d);
         const entries   = timeclock.getEntries(dateStr);
         const expanded  = timeclock.state.expandedDays.has(dateStr);
         const isNew     = timeclock.state.newEntryDay === dateStr;
         const today     = timeclock.isToday(d);
-
         let dayTotal = 0;
         entries.forEach(e => {
             const h = timeclock.calcHours(e.from, e.to);
             if (h !== null) dayTotal += h;
         });
-
         const entriesHTML = entries.map((e, i) => {
             const h = timeclock.calcHours(e.from, e.to);
             return `
@@ -201,11 +176,9 @@ const timeclock = {
                 </div>
             `;
         }).join('');
-
         const emptyHTML = entries.length === 0
             ? `<div class="empty-day">No entries — tap + to add time</div>`
             : '';
-
         const newFormHTML = `
             <div class="new-entry-form ${isNew ? 'visible' : ''}" id="tc-newform-${dateStr}">
                 <div class="new-entry-row">
@@ -229,7 +202,6 @@ const timeclock = {
                 </div>
             </div>
         `;
-
         return `
             <div class="day-card ${today?'today':''} ${expanded?'expanded':''}" data-date="${dateStr}">
                 <div class="day-header" data-tc-toggle="${dateStr}">
@@ -247,7 +219,6 @@ const timeclock = {
             </div>
         `;
     },
-
     // ── Events ──
     attachEvents() {
         // Week nav
@@ -269,7 +240,6 @@ const timeclock = {
             timeclock.state.expandedDays.add(today);
             timeclock.render();
         });
-
         // Day toggles
         document.querySelectorAll('[data-tc-toggle]').forEach(el => {
             el.addEventListener('click', e => {
@@ -279,7 +249,6 @@ const timeclock = {
                 timeclock.render();
             });
         });
-
         // Add entry buttons
         document.querySelectorAll('[data-tc-addday]').forEach(btn => {
             btn.addEventListener('click', e => {
@@ -291,7 +260,6 @@ const timeclock = {
                 setTimeout(() => document.getElementById(`tc-newFrom-${date}`)?.focus(), 50);
             });
         });
-
         // Cancel new entry
         document.querySelectorAll('[data-tc-canceldate]').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -299,7 +267,6 @@ const timeclock = {
                 timeclock.render();
             });
         });
-
         // Save new entry
         document.querySelectorAll('[data-tc-savedate]').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -317,7 +284,6 @@ const timeclock = {
                 timeclock.render();
             });
         });
-
         // Delete entries
         document.querySelectorAll('[data-tc-delete]').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -329,7 +295,6 @@ const timeclock = {
                 }
             });
         });
-
         // Live-update existing entry hours on time change
         document.querySelectorAll('.tc-entry-from, .tc-entry-to').forEach(input => {
             input.addEventListener('change', () => {
@@ -349,7 +314,6 @@ const timeclock = {
                 timeclock.updateTotalsLive();
             });
         });
-
         // Live preview new entry hours
         document.querySelectorAll('[id^="tc-newFrom-"], [id^="tc-newTo-"]').forEach(input => {
             input.addEventListener('change', () => {
@@ -375,8 +339,15 @@ const timeclock = {
                 }
             });
         });
+        // Delete All timeclock data entries
+        document.getElementById('tcClearData')?.addEventListener('click', () => {
+            if (confirm('Clear all timesheet data? This cannot be undone.')) {
+                localStorage.removeItem(timeclock.STORAGE_KEY);
+                timeclock.state.data = {};
+                timeclock.render();
+            }
+        });
     },
-
     updateTotalsLive() {
         const days = timeclock.getWeekDays(timeclock.state.weekStart);
         let rawTotal = 0;
