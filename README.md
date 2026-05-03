@@ -1,4 +1,5 @@
 # Habdu - Habit Tracker
+https://shadowsnacker.github.io/habdu/
 
 A simple yet beautiful habit tracking app built with vanilla JavaScript.
 
