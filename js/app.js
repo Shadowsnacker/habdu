@@ -488,9 +488,7 @@ document.addEventListener('DOMContentLoaded', function(){
     // Canvas click detection
     const clockCanvas = document.getElementById('clockCanvas');
     if (clockCanvas) {
-        // Handle both click (desktop) and touchend (mobile)
-        function handleClockInteraction(evt) {
-            evt.preventDefault(); // Prevents ghost click after touch
+        clockCanvas.addEventListener('click', function(evt) {
             const mousePos = getMousePos(clockCanvas, evt);
             const centerX = clockCanvas.width / 2;
             const centerY = clockCanvas.height / 2;
@@ -506,10 +504,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     openNewActivityPanel(clickAngle);
                 }
             }
-        }
-
-        clockCanvas.addEventListener('click', handleClockInteraction);
-        clockCanvas.addEventListener('touchend', handleClockInteraction);
+        });
     }
     // Icon selector
     document.getElementById('iconSelector').addEventListener('click', function(e) {
