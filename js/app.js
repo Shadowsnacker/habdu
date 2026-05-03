@@ -379,12 +379,19 @@ document.addEventListener('DOMContentLoaded', function(){
         ctx.fill();
     }
     // ===== CLICK DETECTION FUNCTIONS =====
-    // Get mouse position relative to canvas
+    // Get mouse position relative to canvas — scaled to match canvas coordinate space
     function getMousePos(canvas, evt) {
         const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        // Handle both mouse clicks and touch taps
+        const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+        const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+
         return {
-            x: evt.clientX - rect.left,
-            y: evt.clientY - rect.top
+            x: (clientX - rect.left) * scaleX,
+            y: (clientY - rect.top) * scaleY
         };
     }
     // Convert mouse position to angle
@@ -483,23 +490,28 @@ document.addEventListener('DOMContentLoaded', function(){
     // Canvas click detection
     const clockCanvas = document.getElementById('clockCanvas');
     if (clockCanvas) {
-        clockCanvas.addEventListener('click', function(evt) {
+        // Handle both click (desktop) and touchend (mobile)
+        function handleClockInteraction(evt) {
+            evt.preventDefault(); // Prevents ghost click after touch
             const mousePos = getMousePos(clockCanvas, evt);
             const centerX = clockCanvas.width / 2;
             const centerY = clockCanvas.height / 2;
             const radius = Math.min(centerX, centerY) - 60;
-            
+
             if (isInsideCircle(mousePos.x, mousePos.y, centerX, centerY, radius)) {
                 const clickAngle = mouseToAngle(mousePos.x, mousePos.y, centerX, centerY);
                 const activityIndex = getClickedActivity(clickAngle);
-                
+
                 if (activityIndex !== -1) {
                     openSettingsPanel(activityIndex);
                 } else {
                     openNewActivityPanel(clickAngle);
                 }
             }
-        });
+        }
+
+        clockCanvas.addEventListener('click', handleClockInteraction);
+        clockCanvas.addEventListener('touchend', handleClockInteraction);
     }
     // Icon selector
     document.getElementById('iconSelector').addEventListener('click', function(e) {
