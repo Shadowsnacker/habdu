@@ -415,7 +415,7 @@ document.addEventListener('DOMContentLoaded', function(){
             const endAngle = timeToAngle(
                 activity.startHour + activity.durationHours,
                 activity.startMin + activity.durationMin
-            );
+            ) % 360; // Midnight wrapping magic happens here
             
             if (endAngle < startAngle) {
                 // Activity wraps around midnight
