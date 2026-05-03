@@ -386,12 +386,10 @@ document.addEventListener('DOMContentLoaded', function(){
         const scaleY = canvas.height / rect.height;
 
         // Handle both mouse clicks and touch taps
-        const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
-        const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
-
+        const touch = evt.changedTouches ? evt.changedTouches[0] : evt;
         return {
-            x: (clientX - rect.left) * scaleX,
-            y: (clientY - rect.top) * scaleY
+            x: (touch.clientX - rect.left) * scaleX,
+            y: (touch.clientY - rect.top) * scaleY
         };
     }
     // Convert mouse position to angle
