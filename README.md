@@ -14,7 +14,7 @@ A simple yet beautiful habit tracking app built with vanilla JavaScript.
 - **Vanilla JavaScript** - All functionality
 - **localStorage** - Data persistence
 
-## 📚 What I'm Learning
+## 📚 What I've Learned
 - [ ] DOM manipulation and event handling
 - [ ] Working with arrays and objects
 - [ ] localStorage API
@@ -28,8 +28,6 @@ A simple yet beautiful habit tracking app built with vanilla JavaScript.
 - [ ] Visual progress indicators
 - [ ] Data persists across sessions
 
-## 💭 Development Journal
-**Day 1**: Setting up project structure and learning about professional file organization.
 
 ---
 *This is my first real JavaScript project. Building it twice - once in vanilla JS to learn fundamentals, then rebuilding in React to understand modern frameworks.*
