@@ -12,6 +12,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;  /* NEW - makes sidebar and content sit side-by-side */
+    padding-bottom: env(safe-area-insert-bottom);
 }
 
 /* Sidebar Navigation */
